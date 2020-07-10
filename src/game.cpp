@@ -5,10 +5,10 @@
 Game::Game(std::size_t grid_width, std::size_t grid_height)
     : snake(grid_width, grid_height),
       engine(dev()),
-      frandom_w(0, static_cast<int>(grid_width)),
-      frandom_h(0, static_cast<int>(grid_height)),
-      prandom_w(0, static_cast<int>(grid_width)),
-      prandom_h(0, static_cast<int>(grid_height)) {
+      frandom_w(0, static_cast<int>(grid_width-1)), // -1 to make sure inside the window
+      frandom_h(0, static_cast<int>(grid_height-1)),
+      prandom_w(0, static_cast<int>(grid_width-1)),
+      prandom_h(0, static_cast<int>(grid_height-1)) {
   PlaceFood();
   PlacePoison();
 }
