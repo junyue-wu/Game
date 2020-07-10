@@ -5,9 +5,12 @@
 Game::Game(std::size_t grid_width, std::size_t grid_height)
     : snake(grid_width, grid_height),
       engine(dev()),
-      random_w(0, static_cast<int>(grid_width)),
-      random_h(0, static_cast<int>(grid_height)) {
+      frandom_w(0, static_cast<int>(grid_width)),
+      frandom_h(0, static_cast<int>(grid_height)),
+      prandom_w(0, static_cast<int>(grid_width)),
+      prandom_h(0, static_cast<int>(grid_height)) {
   PlaceFood();
+  PlacePoison();
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer,
@@ -25,7 +28,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food);
+    renderer.Render(snake, food, poison);
 
     frame_end = SDL_GetTicks();
 
@@ -53,13 +56,28 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 void Game::PlaceFood() {
   int x, y;
   while (true) {
-    x = random_w(engine);
-    y = random_h(engine);
+    x = frandom_w(engine);
+    y = frandom_h(engine);
     // Check that the location is not occupied by a snake item before placing
     // food.
     if (!snake.SnakeCell(x, y)) {
       food.x = x;
       food.y = y;
+      return;
+    }
+  }
+}
+
+void Game::PlacePoison() {
+  int x, y;
+  while (true) {
+    x = prandom_w(engine);
+    y = prandom_h(engine);
+    // Check that the location is not occupied by a snake item before placing
+    // food.
+    if ((!snake.SnakeCell(x, y)) && x != food.x && y != food.y) {
+      poison.x = x;
+      poison.y = y;
       return;
     }
   }
@@ -80,6 +98,12 @@ void Game::Update() {
     // Grow snake and increase speed.
     snake.GrowBody();
     snake.speed += 0.02;
+  }
+
+  // check if there's poison over there
+  if (poison.x == new_x && poison.y == new_y) {
+    score = score - 2;
+    PlacePoison();
   }
 }
 

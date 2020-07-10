@@ -18,15 +18,21 @@ class Game {
  private:
   Snake snake;
   SDL_Point food;
+  SDL_Point poison;
 
   std::random_device dev;
   std::mt19937 engine;
-  std::uniform_int_distribution<int> random_w;
-  std::uniform_int_distribution<int> random_h;
+  // random w,h for food
+  std::uniform_int_distribution<int> frandom_w;
+  std::uniform_int_distribution<int> frandom_h;
+  // random w,h for poison
+  std::uniform_int_distribution<int> prandom_w;
+  std::uniform_int_distribution<int> prandom_h;
 
   int score{0};
 
   void PlaceFood();
+  void PlacePoison();
   void Update();
 };
 
