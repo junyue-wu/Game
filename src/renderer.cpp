@@ -78,7 +78,7 @@ void Renderer::Render(Snake const snake, Snake const enemy, SDL_Point const &foo
   SDL_RenderFillRect(sdl_renderer, &block);
 
   // Render enemy's body
-  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x1E, 0x00, 0xFF);
+  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x9E, 0xF0, 0xFF);
   for (SDL_Point const &point : enemy.body) {
     block.x = point.x * block.w;
     block.y = point.y * block.h;
@@ -89,7 +89,7 @@ void Renderer::Render(Snake const snake, Snake const enemy, SDL_Point const &foo
   block.x = static_cast<int>(enemy.head_x) * block.w;
   block.y = static_cast<int>(enemy.head_y) * block.h;
   if (enemy.alive) {
-    SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
+    SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
   } else {
     SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
   }

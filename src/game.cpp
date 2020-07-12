@@ -4,14 +4,13 @@
 #include "SDL.h"
 
 Game::Game(std::size_t grid_width, std::size_t grid_height)
-    : snake(grid_width, grid_height, true),
-      enemy(grid_width, grid_height, false),
+    : snake(grid_width, grid_height, 1, true),
+      enemy(grid_width, grid_height, 1, false),
       engine(dev()),
       frandom_w(0, static_cast<int>(grid_width-1)), // -1 to make sure inside the window
       frandom_h(0, static_cast<int>(grid_height-1)),
       prandom_w(0, static_cast<int>(grid_width-1)),
       prandom_h(0, static_cast<int>(grid_height-1)) {
-  enemy.size = 4;
   PlaceFood();
   PlacePoison();
 }
@@ -30,10 +29,10 @@ void Game::Run(Controller &controller, Renderer &renderer,
 
     // Input, Update, Render - the main game loop.
     controller.RandomInput(enemy);
-    Update(enemy);
+    Update(enemy, enemy);
 
     controller.HandleInput(running, snake);
-    Update(snake);
+    Update(snake, enemy);
 
     renderer.Render(snake, enemy, food, poison);
 
@@ -90,10 +89,10 @@ void Game::PlacePoison() {
   }
 }
 
-void Game::Update(Snake &obj) {
+void Game::Update(Snake &obj, Snake &enemy) {
   if (!obj.alive) return;
 
-  obj.Update();
+  obj.Update(enemy);
 
   int new_x = static_cast<int>(obj.head_x);
   int new_y = static_cast<int>(obj.head_y);

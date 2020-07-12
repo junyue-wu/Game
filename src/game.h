@@ -34,7 +34,7 @@ class Game {
 
   void PlaceFood();
   void PlacePoison();
-  void Update(Snake &obj);
+  void Update(Snake &obj, Snake &enemy);
 };
 
 #endif
