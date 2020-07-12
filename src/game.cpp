@@ -1,19 +1,22 @@
 #include "game.h"
 #include <iostream>
+//#include <thread>
 #include "SDL.h"
 
 Game::Game(std::size_t grid_width, std::size_t grid_height)
-    : snake(grid_width, grid_height),
+    : snake(grid_width, grid_height, true),
+      enemy(grid_width, grid_height, false),
       engine(dev()),
       frandom_w(0, static_cast<int>(grid_width-1)), // -1 to make sure inside the window
       frandom_h(0, static_cast<int>(grid_height-1)),
       prandom_w(0, static_cast<int>(grid_width-1)),
       prandom_h(0, static_cast<int>(grid_height-1)) {
+  enemy.size = 4;
   PlaceFood();
   PlacePoison();
 }
 
-void Game::Run(Controller const &controller, Renderer &renderer,
+void Game::Run(Controller &controller, Renderer &renderer,
                std::size_t target_frame_duration) {
   Uint32 title_timestamp = SDL_GetTicks();
   Uint32 frame_start;
@@ -26,9 +29,13 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     frame_start = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
+    controller.RandomInput(enemy);
+    Update(enemy);
+
     controller.HandleInput(running, snake);
-    Update();
-    renderer.Render(snake, food, poison);
+    Update(snake);
+
+    renderer.Render(snake, enemy, food, poison);
 
     frame_end = SDL_GetTicks();
 
@@ -83,26 +90,32 @@ void Game::PlacePoison() {
   }
 }
 
-void Game::Update() {
-  if (!snake.alive) return;
+void Game::Update(Snake &obj) {
+  if (!obj.alive) return;
 
-  snake.Update();
+  obj.Update();
 
-  int new_x = static_cast<int>(snake.head_x);
-  int new_y = static_cast<int>(snake.head_y);
+  int new_x = static_cast<int>(obj.head_x);
+  int new_y = static_cast<int>(obj.head_y);
 
   // Check if there's food over here
   if (food.x == new_x && food.y == new_y) {
-    score++;
+    // enemy snake does not get score
+    if (obj.isMainsnake == true) {
+      score++;
+    }
     PlaceFood();
     // Grow snake and increase speed.
-    snake.GrowBody();
-    snake.speed += 0.02;
+    obj.GrowBody();
+    obj.speed += 0.02;
   }
 
   // check if there's poison over there
   if (poison.x == new_x && poison.y == new_y) {
-    score = score - 2;
+    // enemy snake does not get score
+    if (obj.isMainsnake == true) {
+      score = score - 2;
+    }
     PlacePoison();
   }
 }

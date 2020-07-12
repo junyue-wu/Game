@@ -10,13 +10,14 @@
 class Game {
  public:
   Game(std::size_t grid_width, std::size_t grid_height);
-  void Run(Controller const &controller, Renderer &renderer,
+  void Run(Controller &controller, Renderer &renderer,
            std::size_t target_frame_duration);
   int GetScore() const;
   int GetSize() const;
 
  private:
   Snake snake;
+  Snake enemy;
   SDL_Point food;
   SDL_Point poison;
 
@@ -33,7 +34,7 @@ class Game {
 
   void PlaceFood();
   void PlacePoison();
-  void Update();
+  void Update(Snake &obj);
 };
 
 #endif
