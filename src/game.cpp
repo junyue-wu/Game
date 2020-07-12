@@ -11,6 +11,12 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
       frandom_h(0, static_cast<int>(grid_height-1)),
       prandom_w(0, static_cast<int>(grid_width-1)),
       prandom_h(0, static_cast<int>(grid_height-1)) {
+  // initialize the size of enemy = 3
+  enemy.GrowBody();
+  Update(enemy, enemy);
+  enemy.GrowBody();
+  Update(enemy, enemy);
+  
   PlaceFood();
   PlacePoison();
 }
