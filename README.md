@@ -1,6 +1,6 @@
 # CPPND: Snake Game 2.0
 
-This a Capstone project for Udacity C++ Nanodegree Program.
+This is a Capstone project for Udacity C++ Nanodegree Program.
 Starter repo for this project is in the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). The code for starter repo was inspired by [this](https://codereview.stackexchange.com/questions/212296/snake-game-in-c-with-sdl) excellent StackOverflow post and set of responses.
 
 <img src="snake_game_2_0.png"/>
